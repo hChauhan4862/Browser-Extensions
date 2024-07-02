@@ -1,0 +1,31 @@
+{
+  "name": "Whatsapp Web Api",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "Simple Whatsapp Web API through JavaScript",
+  "web_accessible_resources": ["main_code.js"],
+  "author": "Harendra Chauhan",
+  "background": {
+    "scripts": [
+        "background.js"
+    ]
+},
+  "content_scripts": [
+    {
+      "js": ["startup.js"],
+      "matches": ["https://*.whatsapp.com/"]
+    }
+  ],
+  "content_security_policy": "script-src 'self' https://web.whatsapp.com/; object-src 'self'",
+  "externally_connectable": {
+    "matches": ["https://*.whatsapp.com/"]
+  },
+  "icons": {
+    "128": "images/icon128.png",
+    "48": "images/icon48.png"
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "https://*.whatsapp.com/"]
+}

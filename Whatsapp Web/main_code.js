@@ -1,0 +1,147 @@
+// Code To Load On: https://github.com/mikelustosa/Projeto-TInject/blob/master/Source/JS/js.abr
+// Raw Code On: https://raw.githubusercontent.com/mikelustosa/Projeto-TInject/master/Source/JS/js.abr
+
+window.onload = function () {
+    checkForChatPageLoad();
+};
+
+function injectCode(code, tag) {
+    var node = document.getElementsByTagName(tag)[0];
+    var script = document.createElement("script");
+    script.setAttribute("type", "text/javascript");
+    script.textContent = code;
+    node.appendChild(script);
+}
+
+var hc_main_code = "";
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+        hc_main_code=xhttp.responseText;
+        console.log('[INFO]: Download Code Successfully');
+    }
+    else if (this.readyState == 4) {
+        hc_main_code = "E";
+        alert("Error in Code XHR");
+        console.log('[INFO]: Error In Downloading Code');
+    }
+};
+xhttp.open("GET", "https://raw.githubusercontent.com/mikelustosa/Projeto-TInject/master/Source/JS/js.abr", true);
+xhttp.send();
+
+function checkForChatPageLoad() {
+    console.log('[INFO]: Checking For Message Window.');
+    if(hc_main_code=="E"){return;}
+    if (document.getElementById("side") == null) {
+        setTimeout(checkForChatPageLoad, 10);
+        return;
+    }
+    console.log('[INFO]: Message Window Found.');
+    try {
+        injectCode(hc_main_code,"BODY");
+        if(!Store){return;}
+		// Sending Message to a very new Contact
+
+        var name = (Store && Store.Me && Store.Me.__x_pushname) ? " "+Store.Me.__x_pushname : "";
+        var con = prompt("Welcome"+name+"!\n\n Please Confirm To Load Extenstion By Type `YES`", "NO");
+        if (con.toUpperCase() == 'YES') {
+            console.log("[INFO]: HC Permission Granted");
+            Store.Msg.on('add', (newMessage) => {
+                if (newMessage && newMessage.isNewMsg && !newMessage.isSentByMe) {
+                    hc_handleMessage(newMessage);
+                }
+            });
+
+        }
+        else {
+            console.log("[INFO]: HC Permission Denied");
+        }
+    }
+    catch (err) {
+        console.log("[ERROR]: " + err);
+        alert("Error Code: 100");
+    }
+}
+
+function hc_handleMessage(newMessage) {
+    var message = window.WAPI.processMessageObj(newMessage, false, false);
+    if (message) {
+        // window.WappBot.sendByAPIWappBot(message.body, message.chatId._serialized);
+        // console.log(message); sssssssssssqqq
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                try {
+                    console.log(xhttp.responseText);
+                }
+                catch (err) {
+                    console.log("[ERROR]: " + err);
+                    alert("Error Code: 101");
+                }
+            }
+            else if (this.readyState == 4) {
+                alert("Error in API XHR");
+            }
+        };
+        xhttp.open("POST", "https://omharitelecom.in/whatsapp_bot/api_callback.php", true);
+        xhttp.send(JSON.stringify(message));
+    }
+}
+function hc_sendMessage(contact, message) {
+    try {
+        Store.Chat.find("91" + contact + "@c.us").then(chat => { chat.sendMessage(message); return true; });
+    }
+    catch {
+		Store.Contact.find("91" + contact + "@c.us").then((x) => { Store.Chat.find(x.id).then((user) => { user.sendMessage(message); }); });
+    }
+}
+function new_msg(chatid,msg){
+	if(chatid.toString().length==10) {chatid = "91" + chatid.toString() + "@c.us"}
+	var idUser = new Store.WidFactory.createWid(chatid, {intentionallyUsePrivateConstructor: true});
+		return Store.FindChat.findChat(idUser).then((chat) => {chat.sendMessage(msg);});
+}
+
+//var con = [
+//    {"name":"harendra","mobile":"7599910035"},
+//    {"name":"Rishi Sharma","mobile":"7895809320"}
+//];
+//con.forEach(function(a){
+//    var msg = "Good Morning ";
+//    var mo = a.mobile;
+//    new_msg(mo,msg);
+//})
+
+var con = [
+		{"name":"harendra","mobile":"9758684152"},
+		{"name":"Rishi Sharma","mobile":"7895809320"}
+];
+var Glink = "https://forms.gle/mZt8u8Btnb7nqG8C9";
+var postname = "Web & Mobile UI/UX designer";
+
+function sendBotChat(){
+	con.forEach(function(a){
+		var mo = a.mobile;
+		var name = a.name
+
+		var msg = `Hi ${name},
+
+I am Rishi Sharma from Wise Neosco India PVT L.T.D.
+Wise Neosco India PVT L.T.D is a Korea-based Multi-National Company and we are hiring *${postname}* in our Greater Noida Office.
+
+I find your profile from naukri.com, so I am contacting you if you are willing to change your JOB give me a confirmation by filling-up Google Form with your latest resume/CV.
+
+Fill-up the Google Form *( ${Glink} )* to apply with required details and an updated resume ASAP.
+
+*Note:* Job Description for this position is already available in Google Form, so have a look at that and fill-up the form only if you are eligible for this position.
+
+If you have any queries, feel free to contact me via email/phone/message. 
+
+~Admin/HR
+Rishi Sharma 
+Mail AT: info@wiseneoscoindia.com
+Mob: +91-8899092727
+`;
+		new_msg(mo,msg);
+		new_msg(mo,Glink);
+	})
+}

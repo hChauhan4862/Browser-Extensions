@@ -1,0 +1,19 @@
+{
+  "name": "HC SETU",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {"matches": ["https://setu.pmjay.gov.in/setu/stateBeneficiarySearch*__DISABLED__"],"js": ["hc_injector_home.js"]},
+    {"matches": ["https://bis.pmjay.gov.in/BIS/selfprintCard*"],"js": ["hc_injector_download.js"]},
+    {"matches": ["https://setu.pmjay.gov.in/setu/beneficiarySearchByhhid*"],"js": ["hc_injector_home.js"]},
+    {"matches": ["https://setu.pmjay.gov.in/setu/beneficiarySearchByhhid*__DISABLED__"],"js": ["hc_injector_ration.js"]}
+  ],
+  "web_accessible_resources": [{ 
+    "resources": ["hc_main_home.js","hc_main_ration.js","hc_main_download.js"],
+    "matches": ["<all_urls>"]
+  }],
+  "action": {}
+}

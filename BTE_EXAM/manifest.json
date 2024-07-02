@@ -1,0 +1,19 @@
+{
+  "name": "Harendra Chauhan BTE",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["hc.js"]
+    }
+  ],
+  "web_accessible_resources": [{ 
+    "resources": ["hc_main.js"],
+    "matches": ["<all_urls>"]
+  }],
+  "action": {}
+}

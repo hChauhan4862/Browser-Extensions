@@ -1,0 +1,19 @@
+{
+  "name": "OM HARI TELECOM",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {"matches": ["https://nfsa.up.gov.in/Food/*"],"js": ["inj_FCS.js"]},
+
+    {"matches": ["https://voters.eci.gov.in/*"],"js": ["inj_EPIC.js"]},
+    {"matches": ["https://static.bombay.live/xxxxxxNOT IN USExxxxxxxxxx"],"js": ["inj_BOMBAY.js"]}
+  ],
+  "web_accessible_resources": [{ 
+    "resources": ["main_FCS.js","main_EPIC.js", "main_BOMBAY.js"],
+    "matches": ["<all_urls>"]
+  }],
+  "action": {}
+}
